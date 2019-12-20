@@ -1,4 +1,4 @@
-const seps = new Set(['.', '!', '?']);
+const seps = /[.?!;:]/;
 class MarkovChain {
 	constructor(n) {
 		//	The n in n-gram
@@ -16,7 +16,7 @@ class MarkovChain {
 		const words = string.split(' ').filter(s => s !== ' ').filter(s => s !== '');
 
 		//	The sub-section of the sentence we'll be looking at
-		const buffer = []
+		const buffer = [];
 
 		if (words.length <= this.n) {
 			return;
@@ -31,11 +31,19 @@ class MarkovChain {
 			const key = buffer.slice(0, this.n);
 			if (this.Chain.has(key)) {
 				this.Chain[key].push(buffer[buffer.length - 1]);
-			} else {
+			}
+			else {
 				this.Chain[key] = buffer[buffer.length - 1];
 			}
 
 			buffer.slice(1, buffer.length - 1);
+		}
+	}
+
+	trainCorpus(block) {
+		const sentences = block.replace(/\n/g, ' ').split(seps).filter(s => s !== '');
+		for (const s of sentences) {
+			this.trainSentence(s);
 		}
 	}
 }
