@@ -1,4 +1,6 @@
 const seps = /[.?!;:]/;
+const END_TOKEN = '__END__';
+
 class MarkovChain {
 	constructor(n) {
 		//	The n in n-gram
@@ -33,17 +35,40 @@ class MarkovChain {
 				this.Chain[key].push(buffer[buffer.length - 1]);
 			}
 			else {
-				this.Chain[key] = buffer[buffer.length - 1];
+				this.Chain[key] = [buffer[buffer.length - 1]];
 			}
 
 			buffer.slice(1, buffer.length - 1);
 		}
+		if (this.Chain.has(buffer)) {
+			this.Chain[buffer].push(END_TOKEN);
+		}
+		else {
+			this.Chain[buffer] = [END_TOKEN];
+		}
 	}
 
+	//	Adding a block of text
 	trainCorpus(block) {
 		const sentences = block.replace(/\n/g, ' ').split(seps).filter(s => s !== '');
 		for (const s of sentences) {
 			this.trainSentence(s);
+		}
+	}
+
+	takeRandom(arr) {
+		return arr[Math.floor(Math.random() * arr.length)];
+	}
+
+	generateSentence() {
+		const generated = [];
+		const toadd = this.takeRandom(this.start);
+		let next = '';
+		while (next !== END_TOKEN) {
+			generated.push();
+			next = this.takeRandom(this.Chain[toadd]);
+			toadd.splice(0, 1);
+			t
 		}
 	}
 }
