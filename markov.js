@@ -24,13 +24,18 @@ class MarkovChain {
 			return;
 		}
 
-		this.start.push(words.slice(0, this.n + 1));
-		buffer.push(words.slice(0, this.n + 1));
+		this.start.push(words.slice(0, this.n));
+		buffer.push(words.slice(0, this.n));
+
 		words.splice(0, this.n);
+
+		let loc = 0;
 
 		for (const w of words) {
 			buffer.push(w);
-			const key = buffer.slice(0, this.n);
+			const key = buffer.slice(loc, this.n + loc);
+			loc += 1;
+
 			if (this.Chain.hasOwnProperty(key)) {
 				this.Chain[key].push(buffer[buffer.length - 1]);
 			}
@@ -40,6 +45,7 @@ class MarkovChain {
 
 			buffer.slice(1, buffer.length - 1);
 		}
+		buffer.splice(0, loc);
 		if (this.Chain.hasOwnProperty(buffer)) {
 			this.Chain[buffer].push(END_TOKEN);
 		}
@@ -64,18 +70,20 @@ class MarkovChain {
 	// Generating a sentence from the current chain
 	generateSentence() {
 		console.log(this.Chain);
+		console.log(this.start);
 		const generated = [];
 		const toadd = this.takeRandom(this.start);
-		console.log(toadd);
+
 		generated.push(toadd.join(' '));
 		let next = this.takeRandom(this.Chain[toadd]);
-		console.log('Next: ' + next);
+
 		while (next !== END_TOKEN) {
 			generated.push(next);
 			console.log('Generated: ' + generated);
 			console.log('Chain: ' + this.Chain[toadd]);
 			next = this.takeRandom(this.Chain[toadd]);
 			toadd.splice(0, 1).push(next);
+			console.log('Toadd: ' + toadd);
 		}
 		return generated.join(' ');
 	}

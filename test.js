@@ -6,3 +6,4 @@ const s2 = 'Yes Yes No';
 m.trainSentence(s1);
 m.trainSentence(s2);
 console.log(m.generateSentence());
+console.log(['Yes', 'No'].slice(0, 1));
