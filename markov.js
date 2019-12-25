@@ -21,31 +21,35 @@ class MarkovChain {
 		const buffer = [];
 
 		if (words.length <= this.n) {
-			return;
+			if (this.Chain.hasOwnProperty(words)) {
+				this.Chain[words].push(END_TOKEN);
+			}
+			else {
+				this.Chain[words] = [END_TOKEN];
+			}
 		}
 
 		this.start.push(words.slice(0, this.n));
-		buffer.push(words.slice(0, this.n));
+		for (let i = 0; i < this.n; i++) {
+			buffer.push(words[i]);
+		}
 
 		words.splice(0, this.n);
 
-		let loc = 0;
-
 		for (const w of words) {
 			buffer.push(w);
-			const key = buffer.slice(loc, this.n + loc);
-			loc += 1;
+			const key = buffer.slice(0, this.n);
 
 			if (this.Chain.hasOwnProperty(key)) {
-				this.Chain[key].push(buffer[buffer.length - 1]);
+				this.Chain[key].push(w);
 			}
 			else {
-				this.Chain[key] = [buffer[buffer.length - 1]];
+				this.Chain[key] = [w];
 			}
 
-			buffer.slice(1, buffer.length - 1);
+			buffer.splice(0, 1);
 		}
-		buffer.splice(0, loc);
+		buffer.splice(0, 1);
 		if (this.Chain.hasOwnProperty(buffer)) {
 			this.Chain[buffer].push(END_TOKEN);
 		}
@@ -84,7 +88,13 @@ class MarkovChain {
 			generated.push(next);
 			toadd.splice(0, 1);
 			toadd.push(next);
-			next = this.takeRandom(this.Chain[toadd]);
+
+			if (this.Chain.hasOwnProperty(toadd)) {
+				next = this.takeRandom(this.Chain[toadd]);
+			}
+			else {
+				return generated.join(' ');
+			}
 		}
 		return generated.join(' ');
 	}

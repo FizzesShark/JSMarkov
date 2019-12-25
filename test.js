@@ -1,10 +1,8 @@
 const M = require('./markov.js');
 const fs = require('fs');
-const m = new M(1);
+const m = new M(2);
 
-fs.readFile('./alice_oz.txt', 'utf-8', (err, data) => {
-	if (err) throw err;
+const text = fs.readFileSync('./alice_oz.txt').toString();
 
-	m.trainCorpus(data);
-	console.log(m.generateSentence());
-});
+m.trainCorpus(text);
+console.log(m.generateSentence());
