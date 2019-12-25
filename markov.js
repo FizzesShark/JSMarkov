@@ -63,12 +63,13 @@ class MarkovChain {
 	generateSentence() {
 		const generated = [];
 		const toadd = this.takeRandom(this.start);
-		let next = '';
+		generated.push(toadd.join(' '));
+		let next = this.takeRandom(this.Chain[toadd]);
 		while (next !== END_TOKEN) {
-			generated.push();
+			generated.push(next);
 			next = this.takeRandom(this.Chain[toadd]);
-			toadd.splice(0, 1);
-			t
+			toadd.splice(0, 1).push(next);
 		}
+		return generated.join(' ');
 	}
 }
