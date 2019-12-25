@@ -69,6 +69,8 @@ class MarkovChain {
 
 	// Generating a sentence from the current chain
 	generateSentence() {
+		if (this.start.length == 0) return '';
+
 		//	The full sentence
 		const generated = [];
 
