@@ -69,9 +69,10 @@ class MarkovChain {
 
 	// Generating a sentence from the current chain
 	generateSentence() {
-		console.log(this.Chain);
-		console.log(this.start);
+		//	The full sentence
 		const generated = [];
+
+		//	Next term
 		const toadd = this.takeRandom(this.start);
 
 		generated.push(toadd.join(' '));
@@ -79,11 +80,9 @@ class MarkovChain {
 
 		while (next !== END_TOKEN) {
 			generated.push(next);
-			console.log('Generated: ' + generated);
-			console.log('Chain: ' + this.Chain[toadd]);
+			toadd.splice(0, 1);
+			toadd.push(next);
 			next = this.takeRandom(this.Chain[toadd]);
-			toadd.splice(0, 1).push(next);
-			console.log('Toadd: ' + toadd);
 		}
 		return generated.join(' ');
 	}
