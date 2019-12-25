@@ -31,7 +31,7 @@ class MarkovChain {
 		for (const w of words) {
 			buffer.push(w);
 			const key = buffer.slice(0, this.n);
-			if (this.Chain.has(key)) {
+			if (this.Chain.hasOwnProperty(key)) {
 				this.Chain[key].push(buffer[buffer.length - 1]);
 			}
 			else {
@@ -40,7 +40,7 @@ class MarkovChain {
 
 			buffer.slice(1, buffer.length - 1);
 		}
-		if (this.Chain.has(buffer)) {
+		if (this.Chain.hasOwnProperty(buffer)) {
 			this.Chain[buffer].push(END_TOKEN);
 		}
 		else {
@@ -56,20 +56,29 @@ class MarkovChain {
 		}
 	}
 
+	//	Taking a random element from an array
 	takeRandom(arr) {
 		return arr[Math.floor(Math.random() * arr.length)];
 	}
 
+	// Generating a sentence from the current chain
 	generateSentence() {
+		console.log(this.Chain);
 		const generated = [];
 		const toadd = this.takeRandom(this.start);
+		console.log(toadd);
 		generated.push(toadd.join(' '));
 		let next = this.takeRandom(this.Chain[toadd]);
+		console.log('Next: ' + next);
 		while (next !== END_TOKEN) {
 			generated.push(next);
+			console.log('Generated: ' + generated);
+			console.log('Chain: ' + this.Chain[toadd]);
 			next = this.takeRandom(this.Chain[toadd]);
 			toadd.splice(0, 1).push(next);
 		}
 		return generated.join(' ');
 	}
 }
+
+module.exports = MarkovChain;
