@@ -21,7 +21,7 @@ class MarkovChain {
 		const buffer = [];
 
 		if (words.length <= this.n) {
-			if (this.Chain.hasOwnProperty(words)) {
+			if (Object.prototype.hasOwnProperty.call(this.Chain, words)) {
 				this.Chain[words].push(END_TOKEN);
 			}
 			else {
@@ -40,7 +40,7 @@ class MarkovChain {
 			buffer.push(w);
 			const key = buffer.slice(0, this.n);
 
-			if (this.Chain.hasOwnProperty(key)) {
+			if (Object.prototype.hasOwnProperty.call(this.Chain, key)) {
 				this.Chain[key].push(w);
 			}
 			else {
@@ -50,7 +50,7 @@ class MarkovChain {
 			buffer.splice(0, 1);
 		}
 		buffer.splice(0, 1);
-		if (this.Chain.hasOwnProperty(buffer)) {
+		if (Object.prototype.hasOwnProperty.call(this.Chain, buffer)) {
 			this.Chain[buffer].push(END_TOKEN);
 		}
 		else {
@@ -89,7 +89,7 @@ class MarkovChain {
 			toadd.splice(0, 1);
 			toadd.push(next);
 
-			if (this.Chain.hasOwnProperty(toadd)) {
+			if (Object.prototype.hasOwnProperty.call(this.Chain, toadd)) {
 				next = this.takeRandom(this.Chain[toadd]);
 			}
 			else {
